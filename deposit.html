@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Deposit - Mirzabook</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f3f3f3;
+      padding: 20px;
+      text-align: center;
+    }
+    .box {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      display: inline-block;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    }
+    input, button {
+      padding: 10px;
+      margin-top: 10px;
+      width: 80%;
+      max-width: 300px;
+    }
+    button {
+      background-color: green;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: darkgreen;
+    }
+  </style>
+</head>
+<body>
+  <div class="box">
+    <h2>Deposit to Mirzabook</h2>
+    <p>Send money to this UPI ID:</p>
+    <h3 style="color:blue;">7002521381@paytm</h3>
+    <p>After payment, enter your UTR number:</p>
+    <input type="text" placeholder="Enter UTR Number" />
+    <br>
+    <button onclick="alert('Deposit Request Submitted')">Submit</button>
+  </div>
+</body>
+</html>
