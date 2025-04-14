@@ -1,85 +1,116 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>IPL Live Betting - MirzaBook</title>
   <style>
     body {
-      background: #121212;
-      color: white;
       font-family: Arial, sans-serif;
-      padding: 10px;
+      background-color: #0f172a;
+      color: white;
+      margin: 0;
+      padding: 0;
     }
-    h2 {
-      text-align: center;
-      color: yellow;
-    }
-    .match-box {
-      background: #1e1e1e;
+    header {
+      background-color: #ffc107;
+      color: #000;
       padding: 15px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-    }
-    .team {
+      text-align: center;
       font-size: 20px;
+      font-weight: bold;
+    }
+    .match-container {
+      padding: 20px;
+    }
+    .teams {
+      display: flex;
+      justify-content: space-between;
+      font-size: 22px;
       margin-bottom: 10px;
     }
     .odds-table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 10px;
+      margin-top: 20px;
     }
     .odds-table th, .odds-table td {
+      border: 1px solid #444;
       padding: 10px;
       text-align: center;
     }
     .back {
-      background-color: #6ec1e4;
+      background-color: #87ceeb;
       color: black;
     }
     .lay {
-      background-color: #f4a5b3;
+      background-color: #ffcccb;
       color: black;
+    }
+    .section-title {
+      margin-top: 30px;
+      font-size: 18px;
+      color: #ffc107;
     }
   </style>
 </head>
 <body>
-  <h2>Lucknow Super Giants vs Chennai Super Kings</h2>
 
-  <div class="match-box">
-    <div class="team">Match Odds</div>
+  <header>CSK vs LSG - IPL Live Odds</header>
+
+  <div class="match-container">
+    <div class="teams">
+      <span id="team1">Chennai Super Kings</span>
+      <span>vs</span>
+      <span id="team2">Lucknow Super Giants</span>
+    </div>
+
+    <div class="section-title">MATCH ODDS</div>
     <table class="odds-table">
-      <tr>
-        <th>Team</th>
-        <th class="back">Back</th>
-        <th class="lay">Lay</th>
-      </tr>
-      <tr>
-        <td>Lucknow Super Giants</td>
-        <td class="back" id="lsg-back">1.69</td>
-        <td class="lay" id="lsg-lay">1.70</td>
-      </tr>
-      <tr>
-        <td>Chennai Super Kings</td>
-        <td class="back" id="csk-back">2.42</td>
-        <td class="lay" id="csk-lay">2.44</td>
-      </tr>
+      <thead>
+        <tr>
+          <th>Team</th>
+          <th class="back">BACK</th>
+          <th class="lay">LAY</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td id="team1Name">CSK</td>
+          <td class="back" id="cskBack">1.80</td>
+          <td class="lay" id="cskLay">1.82</td>
+        </tr>
+        <tr>
+          <td id="team2Name">LSG</td>
+          <td class="back" id="lsgBack">2.10</td>
+          <td class="lay" id="lsgLay">2.14</td>
+        </tr>
+      </tbody>
     </table>
   </div>
 
   <script>
-    // Dummy AI-like odds generator
-    setInterval(() => {
-      const lsgBack = (1.5 + Math.random() * 0.5).toFixed(2);
-      const lsgLay = (parseFloat(lsgBack) + 0.01).toFixed(2);
-      const cskBack = (2.0 + Math.random() * 0.6).toFixed(2);
-      const cskLay = (parseFloat(cskBack) + 0.02).toFixed(2);
+    function getRandom(min, max) {
+      return (Math.random() * (max - min) + min).toFixed(2);
+    }
 
-      document.getElementById("lsg-back").innerText = lsgBack;
-      document.getElementById("lsg-lay").innerText = lsgLay;
-      document.getElementById("csk-back").innerText = cskBack;
-      document.getElementById("csk-lay").innerText = cskLay;
-    }, 3000); // update every 3 seconds
+    function updateOdds() {
+      const cskPerformance = Math.random();
+      const lsgPerformance = 1 - cskPerformance;
+
+      const cskBack = (1.5 + (1 - cskPerformance)).toFixed(2);
+      const cskLay = (+cskBack + 0.02).toFixed(2);
+
+      const lsgBack = (1.5 + (1 - lsgPerformance)).toFixed(2);
+      const lsgLay = (+lsgBack + 0.04).toFixed(2);
+
+      document.getElementById('cskBack').innerText = cskBack;
+      document.getElementById('cskLay').innerText = cskLay;
+      document.getElementById('lsgBack').innerText = lsgBack;
+      document.getElementById('lsgLay').innerText = lsgLay;
+    }
+
+    setInterval(updateOdds, 3000);
   </script>
 </body>
 </html>
