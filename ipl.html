@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>IPL Live Betting - MirzaBook</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f5f5f5; }
+    h1 { color: #333; }
+    .match { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #ccc; }
+    .team { display: flex; justify-content: space-between; margin: 10px 0; }
+    .odds { font-weight: bold; color: green; }
+    .suspended { color: red; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+  <h1>IPL Live - MirzaBook</h1>
+
+  <div class="match" id="match">
+    <h2 id="matchTitle">Loading match...</h2>
+
+    <div class="team">
+      <span id="team1">Team A</span>
+      <span class="odds">Back: <span id="back1">--</span> | Lay: <span id="lay1">--</span></span>
+    </div>
+
+    <div class="team">
+      <span id="team2">Team B</span>
+      <span class="odds">Back: <span id="back2">--</span> | Lay: <span id="lay2">--</span></span>
+    </div>
+
+    <p id="status"></p>
+  </div>
+
+  <script>
+    const matches = [
+      { teams: ["CSK", "LSG"] },
+      { teams: ["PBKS", "KKR"] },
+      { teams: ["MI", "RCB"] },
+      { teams: ["SRH", "GT"] }
+    ];
+
+    let matchIndex = 0;
+    let team1Score = 0;
+    let team2Score = 0;
+
+    function simulateMatch() {
+      const match = matches[matchIndex];
+      document.getElementById("matchTitle").innerText = match.teams[0] + " vs " + match.teams[1];
+      document.getElementById("team1").innerText = match.teams[0];
+      document.getElementById("team2").innerText = match.teams[1];
+
+      team1Score += Math.floor(Math.random() * 10);
+      team2Score += Math.floor(Math.random() * 10);
+
+      let team1Odds = (100 / (team1Score + 1)).toFixed(2);
+      let team2Odds = (100 / (team2Score + 1)).toFixed(2);
+
+      document.getElementById("back1").innerText = team1Odds;
+      document.getElementById("lay1").innerText = (parseFloat(team1Odds) + 0.2).toFixed(2);
+      document.getElementById("back2").innerText = team2Odds;
+      document.getElementById("lay2").innerText = (parseFloat(team2Odds) + 0.2).toFixed(2);
+
+      if (team1Score > 120 || team2Score > 120) {
+        document.getElementById("status").innerText = "Match Suspended";
+        document.getElementById("status").className = "suspended";
+        matchIndex = (matchIndex + 1) % matches.length;
+        team1Score = 0;
+        team2Score = 0;
+        setTimeout(simulateMatch, 5000); // 5 second delay for next match
+      } else {
+        setTimeout(simulateMatch, 2000); // refresh odds every 2 sec
+      }
+    }
+
+    simulateMatch();
+  </script>
+</body>
+</html>
