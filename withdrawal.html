@@ -2,29 +2,44 @@
 <html>
 <head>
   <title>Withdraw - MirzaBook</title>
+  <script>
+    function submitWithdrawal() {
+      const bank = document.getElementById("bank").value;
+      const ifsc = document.getElementById("ifsc").value;
+      const acc = document.getElementById("acc").value;
+      const name = document.getElementById("name").value;
+      const amount = parseFloat(document.getElementById("amount").value);
+
+      if (!bank || !ifsc || !acc || !name || isNaN(amount) || amount <= 0) {
+        alert("Please fill all details correctly.");
+        return;
+      }
+
+      let wallet = parseFloat(localStorage.getItem("wallet")) || 0;
+
+      if (amount > wallet) {
+        alert("Insufficient Wallet Balance.");
+        return;
+      }
+
+      // Deduct from wallet
+      localStorage.setItem("wallet", wallet - amount);
+      alert("Withdrawal request submitted successfully!");
+
+      // Redirect to IPL page after 3 sec
+      setTimeout(() => {
+        window.location.href = "ipl.html";
+      }, 3000);
+    }
+  </script>
 </head>
 <body>
-  <h2>Withdraw Funds</h2>
-  <form>
-    <label>Bank Name:</label><br>
-    <input type="text" required><br><br>
-
-    <label>Account Holder Name:</label><br>
-    <input type="text" required><br><br>
-
-    <label>Account Number:</label><br>
-    <input type="number" required><br><br>
-
-    <label>IFSC Code:</label><br>
-    <input type="text" required><br><br>
-
-    <label>Mobile Number:</label><br>
-    <input type="number" required><br><br>
-
-    <label>Withdrawal Amount (₹):</label><br>
-    <input type="number" required><br><br>
-
-    <button type="submit">Submit</button>
-  </form>
+  <h2>Withdraw to Bank</h2>
+  <input type="text" id="bank" placeholder="Bank Name"><br>
+  <input type="text" id="ifsc" placeholder="IFSC Code"><br>
+  <input type="text" id="acc" placeholder="Account Number"><br>
+  <input type="text" id="name" placeholder="Account Holder Name"><br>
+  <input type="number" id="amount" placeholder="Withdraw Amount"><br>
+  <button onclick="submitWithdrawal()">Submit</button>
 </body>
 </html>
