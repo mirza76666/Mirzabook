@@ -2,6 +2,54 @@
 <html>
 <head>
   <title>Withdraw - MirzaBook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #00cc44; /* Full green background */
+      font-family: 'Segoe UI', sans-serif;
+      color: black;
+    }
+
+    h2 {
+      text-align: center;
+      color: #b8860b; /* Dark golden heading */
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"],
+    input[type="number"] {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+      padding: 12px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      display: block;
+      width: 90%;
+      margin: 20px auto;
+      padding: 12px;
+      background-color: black;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+  </style>
+
   <script>
     function submitWithdrawal() {
       const bank = document.getElementById("bank").value;
@@ -35,11 +83,11 @@
 </head>
 <body>
   <h2>Withdraw to Bank</h2>
-  <input type="text" id="bank" placeholder="Bank Name"><br>
-  <input type="text" id="ifsc" placeholder="IFSC Code"><br>
-  <input type="text" id="acc" placeholder="Account Number"><br>
-  <input type="text" id="name" placeholder="Account Holder Name"><br>
-  <input type="number" id="amount" placeholder="Withdraw Amount"><br>
+  <input type="text" id="bank" placeholder="Bank Name">
+  <input type="text" id="ifsc" placeholder="IFSC Code">
+  <input type="text" id="acc" placeholder="Account Number">
+  <input type="text" id="name" placeholder="Account Holder Name">
+  <input type="number" id="amount" placeholder="Withdraw Amount">
   <button onclick="submitWithdrawal()">Submit</button>
 </body>
 </html>
