@@ -2,115 +2,142 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>MirzaBook - IPL Live Betting</title>
+  <title>IPL Live - MirzaBook</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background-color: #121212;
       color: white;
+      text-align: center;
       padding: 20px;
     }
-    h1, h2 {
-      color: #f1c40f;
+    h1 {
+      color: #ffcc00;
     }
     .match {
-      border: 1px solid #444;
-      padding: 15px;
-      border-radius: 10px;
-      background-color: #1e1e1e;
-      margin-bottom: 20px;
+      font-size: 24px;
+      margin: 10px 0;
     }
-    .teams {
-      display: flex;
-      justify-content: space-between;
-      font-size: 18px;
+    .toss {
+      margin-top: 30px;
+      font-weight: bold;
+    }
+    .toss .teams {
+      font-size: 22px;
       margin-bottom: 10px;
     }
-    .odds {
-      display: flex;
-      justify-content: space-around;
+    .toss .odds {
+      font-size: 20px;
     }
-    .odds div {
-      padding: 10px;
-      border-radius: 5px;
-      width: 45%;
+    .toss .csk {
+      color: darkred;
+      font-weight: bold;
+    }
+    .toss .lsg {
+      color: darkgreen;
+      font-weight: bold;
+    }
+    .bookmaker {
+      margin-top: 40px;
+    }
+    .bookmaker table {
+      margin: 0 auto;
+      width: 80%;
+      border-collapse: collapse;
+      background: #1e1e1e;
+    }
+    .bookmaker th, .bookmaker td {
+      border: 1px solid #444;
+      padding: 12px;
     }
     .back {
-      background-color: #4CAF50;
+      background-color: #4caf50;
+      color: white;
     }
     .lay {
-      background-color: #e74c3c;
+      background-color: #f44336;
+      color: white;
     }
-    .bookmaker, .toss {
-      margin-top: 15px;
+    .suspended {
+      background-color: #ff0000;
       padding: 10px;
-      background: #2c3e50;
-      border-radius: 10px;
+      margin-top: 20px;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-
   <h1>MirzaBook - IPL Live Betting</h1>
 
-  <div class="match">
-    <div class="teams">
-      <strong>CSK</strong> vs <strong>LSG</strong>
-    </div>
-    <div class="odds">
-      <div class="back">
-        <strong>CSK Back:</strong> <span id="csk-back">1.80</span>
-      </div>
-      <div class="lay">
-        <strong>LSG Lay:</strong> <span id="lsg-lay">2.10</span>
-      </div>
-    </div>
-
-    <div class="odds" style="margin-top:10px;">
-      <div class="lay">
-        <strong>CSK Lay:</strong> <span id="csk-lay">2.00</span>
-      </div>
-      <div class="back">
-        <strong>LSG Back:</strong> <span id="lsg-back">2.50</span>
-      </div>
-    </div>
+  <div id="match-section">
+    <div class="match" id="match-name">CSK vs LSG</div>
 
     <div class="toss">
-      <h2>Toss Prediction</h2>
-      <p>LSG won the toss and chose to field.</p>
+      <div class="teams">TOSS PREDICTION - <span id="team1">CSK</span> vs <span id="team2">LSG</span></div>
+      <div class="odds">
+        <span class="csk">2.00</span> vs <span class="lsg">2.00</span>
+      </div>
     </div>
 
     <div class="bookmaker">
-      <h2>Bookmaker</h2>
-      <p>Favorite: <span id="fav-team">CSK</span></p>
+      <h2>Bookmaker Odds</h2>
+      <table>
+        <tr>
+          <th>Team</th>
+          <th>Back</th>
+          <th>Lay</th>
+        </tr>
+        <tr>
+          <td id="team1-bm">CSK</td>
+          <td class="back">2.5</td>
+          <td class="lay">2.5</td>
+        </tr>
+        <tr>
+          <td id="team2-bm">LSG</td>
+          <td class="back">2.5</td>
+          <td class="lay">2.5</td>
+        </tr>
+      </table>
+    </div>
+
+    <div id="suspend-box" class="suspended" style="display: none;">
+      SUSPENDED
     </div>
   </div>
 
   <script>
-    function randomOdds(min, max) {
-      return (Math.random() * (max - min) + min).toFixed(2);
+    const matchName = document.getElementById("match-name");
+    const team1 = document.getElementById("team1");
+    const team2 = document.getElementById("team2");
+    const team1bm = document.getElementById("team1-bm");
+    const team2bm = document.getElementById("team2-bm");
+    const suspendBox = document.getElementById("suspend-box");
+
+    function updateMatch() {
+      const now = new Date();
+      const hour = now.getHours();
+      const minute = now.getMinutes();
+      const indiaOffset = 5.5 * 60 * 60 * 1000;
+      const indiaTime = new Date(now.getTime() + indiaOffset);
+
+      const istHour = indiaTime.getUTCHours();
+      const istMin = indiaTime.getUTCMinutes();
+
+      if (istHour === 0 && istMin >= 0) {
+        matchName.innerText = "PBKS vs KKR";
+        team1.innerText = "PBKS";
+        team2.innerText = "KKR";
+        team1bm.innerText = "PBKS";
+        team2bm.innerText = "KKR";
+      }
+
+      if (istHour >= 23 && istMin >= 30) {
+        suspendBox.style.display = "block";
+      }
     }
 
-    setInterval(() => {
-      const cskPerf = Math.random();
-      const lsgPerf = Math.random();
-
-      let cskBack = cskPerf > lsgPerf ? randomOdds(1.5, 2.0) : randomOdds(2.0, 3.0);
-      let cskLay = (parseFloat(cskBack) + 0.2).toFixed(2);
-
-      let lsgBack = lsgPerf > cskPerf ? randomOdds(1.5, 2.0) : randomOdds(2.0, 3.0);
-      let lsgLay = (parseFloat(lsgBack) + 0.2).toFixed(2);
-
-      document.getElementById("csk-back").innerText = cskBack;
-      document.getElementById("csk-lay").innerText = cskLay;
-      document.getElementById("lsg-back").innerText = lsgBack;
-      document.getElementById("lsg-lay").innerText = lsgLay;
-
-      // Update bookmaker
-      document.getElementById("fav-team").innerText = cskPerf > lsgPerf ? "CSK" : "LSG";
-
-    }, 3000);
+    setInterval(updateMatch, 60000); // Check every minute
+    updateMatch();
   </script>
-
 </body>
 </html>
