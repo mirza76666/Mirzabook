@@ -2,16 +2,32 @@
 <html>
 <head>
   <title>Deposit - MirzaBook</title>
+  <script>
+    function submitUTR() {
+      const utr = document.getElementById('utr').value;
+      if (utr.trim() === "") {
+        alert("Please enter UTR number.");
+        return;
+      }
+
+      alert("UTR submitted successfully!\nPlease wait 10 minutes for confirmation.");
+      
+      // Save UTR in localStorage for record (optional)
+      localStorage.setItem("lastUTR", utr);
+
+      // Redirect to IPL live after 3 seconds
+      setTimeout(() => {
+        window.location.href = "ipl.html";
+      }, 3000);
+    }
+  </script>
 </head>
 <body>
-  <h2>Deposit via UPI</h2>
-  <p>Scan the below QR and pay to <strong>7002521381@paytm</strong></p>
-  <img src="https://api.qrserver.com/v1/create-qr-code/?data=upi://pay?pa=7002521381@paytm&pn=MirzaBook" width="200">
-  <p>Enter UTR Number after payment:</p>
-  <form>
-    <input type="text" placeholder="Enter UTR Number" required><br><br>
-    <button type="submit">Submit</button>
-  </form>
-  <p>Note: Minimum ₹300, Maximum ₹10000</p>
+  <h2>Deposit Money to Wallet</h2>
+  <p>Scan this UPI QR & pay minimum ₹300 to 7002521381@paytm</p>
+  <img src="https://upi-qr-code-link-here" alt="QR Code" width="200"> <!-- Replace with your QR -->
+  <p>After payment, enter UTR number below:</p>
+  <input type="text" id="utr" placeholder="Enter UTR Number">
+  <button onclick="submitUTR()">Submit</button>
 </body>
 </html>
