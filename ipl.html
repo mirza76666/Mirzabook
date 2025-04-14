@@ -3,55 +3,118 @@
 <head>
   <meta charset="UTF-8">
   <title>IPL Live - MirzaBook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    .wallet { text-align: right; margin-bottom: 10px; }
-    .wallet button { margin-left: 10px; }
-    .match-box, .toss-box { border: 1px solid #ccc; padding: 15px; background: white; margin-bottom: 20px; }
-    .team { display: flex; justify-content: space-between; padding: 10px 0; }
-    .bet-btn { padding: 6px 12px; background-color: #3498db; color: white; border: none; cursor: pointer; }
-    .bet-btn:hover { background-color: #2980b9; }
-    .odds { font-weight: bold; }
-    .toss-box .team { font-size: 18px; }
-    .toss-box .csk { color: darkred; }
-    .toss-box .lsg { color: darkgreen; }
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(to bottom, #ff4d4d, #1aff66);
+      color: #fff;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .wallet {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #fff;
+      color: red;
+      padding: 10px 15px;
+      border-radius: 10px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .wallet button {
+      background-color: red;
+      color: #fff;
+      border: none;
+      padding: 8px 12px;
+      margin-left: 8px;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 14px;
+    }
+
+    .match-box, .toss-box {
+      background: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      margin: 20px 0;
+      color: #000;
+    }
+
+    h2, h3 {
+      color: yellow;
+      font-weight: bold;
+      text-align: center;
+    }
+
+    .team {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      font-size: 18px;
+    }
+
+    .team span {
+      font-weight: bold;
+    }
+
+    .bet-btn {
+      background-color: green;
+      color: #fff;
+      padding: 6px 14px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .bet-btn:hover {
+      background-color: darkgreen;
+    }
   </style>
 </head>
 <body>
 
   <div class="wallet">
-    Wallet Balance: ₹<span id="walletBalance">0</span>
-    <button onclick="location.href='deposit.html'">Deposit</button>
-    <button onclick="location.href='withdrawal.html'">Withdraw</button>
+    Wallet: ₹<span id="walletBalance">0</span>
+    <div>
+      <button onclick="location.href='deposit.html'">Deposit</button>
+      <button onclick="location.href='withdrawal.html'">Withdraw</button>
+    </div>
   </div>
 
   <div class="toss-box">
-    <h3>TOSS PREDICTION - CSK vs LSG</h3>
+    <h3>TOSS PREDICTION - PBKS vs KKR</h3>
     <div class="team">
-      <span class="csk">CSK</span>
-      <span class="odds">2.00</span>
-      <button class="bet-btn" onclick="placeBet('toss-csk', 2.0)">Bet CSK</button>
+      <span style="color: yellow;">PBKS</span>
+      <span>2.00</span>
+      <button class="bet-btn" onclick="placeBet('toss-pbks', 2.0)">Place Bet</button>
     </div>
     <div class="team">
-      <span class="lsg">LSG</span>
-      <span class="odds">2.00</span>
-      <button class="bet-btn" onclick="placeBet('toss-lsg', 2.0)">Bet LSG</button>
+      <span style="color: yellow;">KKR</span>
+      <span>2.00</span>
+      <button class="bet-btn" onclick="placeBet('toss-kkr', 2.0)">Place Bet</button>
     </div>
   </div>
 
   <div class="match-box">
-    <h2>CSK vs LSG - Live Match</h2>
+    <h2>PBKS vs KKR - Live Match</h2>
 
     <div class="team">
-      <span>CSK</span>
-      <span class="odds">Back/Lay: 2.5</span>
-      <button class="bet-btn" onclick="placeBet('csk', 2.5)">Bet on CSK</button>
+      <span style="color: yellow;">PBKS</span>
+      <span>Back/Lay: 2.5</span>
+      <button class="bet-btn" onclick="placeBet('pbks', 2.5)">Place Bet</button>
     </div>
 
     <div class="team">
-      <span>LSG</span>
-      <span class="odds">Back/Lay: 2.5</span>
-      <button class="bet-btn" onclick="placeBet('lsg', 2.5)">Bet on LSG</button>
+      <span style="color: yellow;">KKR</span>
+      <span>Back/Lay: 2.5</span>
+      <button class="bet-btn" onclick="placeBet('kkr', 2.5)">Place Bet</button>
     </div>
   </div>
 
@@ -74,11 +137,9 @@
       localStorage.setItem("wallet", balance.toFixed(2));
       document.getElementById("walletBalance").innerText = balance.toFixed(2);
 
-      // Simulate bet record
       alert(`Bet Placed on ${team.toUpperCase()} for ₹${amount}`);
     }
 
-    // Update wallet on page load
     document.getElementById("walletBalance").innerText = localStorage.getItem("wallet") || "0";
   </script>
 </body>
