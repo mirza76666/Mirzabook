@@ -1,65 +1,18 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>IPL Live - MirzaBook</title>
-  <style>
-    body { font-family: Arial; background: #f4f4f4; padding: 20px; }
-    .match-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #aaa; }
-    .teams { display: flex; justify-content: space-between; font-size: 24px; }
-    .odds { display: flex; justify-content: space-around; margin-top: 20px; }
-    .team-box { padding: 10px; text-align: center; width: 45%; }
-    .back { background: #a2f2a2; padding: 10px; border-radius: 5px; }
-    .lay { background: #f2a2a2; padding: 10px; border-radius: 5px; margin-top: 10px; }
-    .toss { margin-top: 30px; padding: 15px; background: #ffe5e5; border-left: 5px solid #f00; font-size: 18px; }
-    .suspended { color: red; font-weight: bold; text-align: center; margin-top: 20px; }
-  </style>
-</head>
-<body>
+<!-- IPL HTML Body mein yeh add karo -->
+<div>
+  <p><strong>Wallet Balance:</strong> <span id="wallet-balance">₹0</span></p>
+  <input type="number" id="betAmount" placeholder="Enter Bet Amount">
+  <button onclick="placeBetFromInput()">Place Bet</button>
+</div>
 
-  <h2>IPL Live Betting - CSK vs LSG</h2>
-
-  <div class="match-box" id="matchBox">
-    <div class="teams">
-      <div>CSK</div>
-      <div>VS</div>
-      <div>LSG</div>
-    </div>
-
-    <div class="odds">
-      <div class="team-box">
-        <div class="back">Back: 2.5</div>
-        <div class="lay">Lay: 2.5</div>
-      </div>
-      <div class="team-box">
-        <div class="back">Back: 2.5</div>
-        <div class="lay">Lay: 2.5</div>
-      </div>
-    </div>
-
-    <div class="toss">
-      <strong>TOSS PREDICTION - CSK VS LSG</strong><br><br>
-      <span style="color: darkred;">2.00</span> vs <span style="color: darkgreen;">2.00</span>
-    </div>
-
-    <div class="suspended" id="suspendText" style="display: none;">
-      Match Suspended
-    </div>
-  </div>
-
-  <script>
-    // Match suspension system
-    const now = new Date();
-    const matchEnd = new Date();
-    matchEnd.setHours(23, 30, 0); // 11:30 PM
-
-    if (now > matchEnd) {
-      document.getElementById("suspendText").style.display = "block";
-      document.querySelector(".odds").style.display = "none";
-      document.querySelector(".toss").style.display = "none";
-      document.querySelector(".teams").innerHTML = "PBKS VS KKR (Upcoming Match)";
+<script src="wallet.js"></script>
+<script>
+  function placeBetFromInput() {
+    const amount = parseFloat(document.getElementById("betAmount").value);
+    if (!isNaN(amount) && amount > 0) {
+      placeBet(amount);
+    } else {
+      alert("Enter valid amount");
     }
-  </script>
-
-</body>
-</html>
+  }
+</script>
