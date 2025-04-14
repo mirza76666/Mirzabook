@@ -1,47 +1,17 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Deposit - Mirzabook</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f3f3f3;
-      padding: 20px;
-      text-align: center;
-    }
-    .box {
-      background: white;
-      padding: 20px;
-      border-radius: 8px;
-      display: inline-block;
-      box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    }
-    input, button {
-      padding: 10px;
-      margin-top: 10px;
-      width: 80%;
-      max-width: 300px;
-    }
-    button {
-      background-color: green;
-      color: white;
-      border: none;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: darkgreen;
-    }
-  </style>
+  <title>Deposit - MirzaBook</title>
 </head>
 <body>
-  <div class="box">
-    <h2>Deposit to Mirzabook</h2>
-    <p>Send money to this UPI ID:</p>
-    <h3 style="color:blue;">7002521381@paytm</h3>
-    <p>After payment, enter your UTR number:</p>
-    <input type="text" placeholder="Enter UTR Number" />
-    <br>
-    <button onclick="alert('Deposit Request Submitted')">Submit</button>
-  </div>
+  <h2>Deposit via UPI</h2>
+  <p>Scan the below QR and pay to <strong>7002521381@paytm</strong></p>
+  <img src="https://api.qrserver.com/v1/create-qr-code/?data=upi://pay?pa=7002521381@paytm&pn=MirzaBook" width="200">
+  <p>Enter UTR Number after payment:</p>
+  <form>
+    <input type="text" placeholder="Enter UTR Number" required><br><br>
+    <button type="submit">Submit</button>
+  </form>
+  <p>Note: Minimum ₹300, Maximum ₹10000</p>
 </body>
 </html>
