@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Live IPL Betting - Mirzabook</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #0f0f0f;
+      color: white;
+      text-align: center;
+    }
+    h1 {
+      color: #ffcc00;
+    }
+    .match {
+      margin: 20px auto;
+      padding: 20px;
+      border: 2px solid #444;
+      width: 90%;
+      max-width: 500px;
+      background: #1a1a1a;
+    }
+    .team {
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+    .odds {
+      display: flex;
+      justify-content: space-around;
+      margin-top: 10px;
+    }
+    .odds div {
+      background-color: #222;
+      padding: 10px;
+      border-radius: 5px;
+      width: 40%;
+    }
+    .status {
+      color: red;
+      margin-top: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Live IPL Betting</h1>
+  <div class="match" id="match-container">
+    <div class="team" id="match-title">Loading Match...</div>
+    <div class="odds">
+      <div>
+        <strong>Team A</strong><br>
+        Back: <span id="teamA-back">--</span><br>
+        Lay: <span id="teamA-lay">--</span>
+      </div>
+      <div>
+        <strong>Team B</strong><br>
+        Back: <span id="teamB-back">--</span><br>
+        Lay: <span id="teamB-lay">--</span>
+      </div>
+    </div>
+    <div class="status" id="match-status"></div>
+  </div>
+
+  <script>
+    // Simulated live data (replace with real API later)
+    const matches = [
+      {
+        title: "CSK vs LSG",
+        teamA: { back: 1.65, lay: 1.70 },
+        teamB: { back: 2.30, lay: 2.35 },
+        status: "Live"
+      },
+      {
+        title: "PBKS vs KKR",
+        teamA: { back: 1.90, lay: 1.95 },
+        teamB: { back: 2.00, lay: 2.05 },
+        status: "Upcoming"
+      }
+    ];
+
+    let current = 0;
+
+    function updateMatch() {
+      const match = matches[current];
+      document.getElementById("match-title").textContent = match.title;
+      document.getElementById("teamA-back").textContent = match.teamA.back;
+      document.getElementById("teamA-lay").textContent = match.teamA.lay;
+      document.getElementById("teamB-back").textContent = match.teamB.back;
+      document.getElementById("teamB-lay").textContent = match.teamB.lay;
+      document.getElementById("match-status").textContent = match.status;
+
+      // Move to next match every 10 seconds
+      current = (current + 1) % matches.length;
+    }
+
+    updateMatch();
+    setInterval(updateMatch, 10000);
+  </script>
+</body>
+</html>
