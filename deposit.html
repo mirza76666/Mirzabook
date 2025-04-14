@@ -2,6 +2,72 @@
 <html>
 <head>
   <title>Deposit - MirzaBook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      background-color: #00cc44; /* Full green background */
+      font-family: 'Segoe UI', sans-serif;
+      color: black;
+    }
+
+    h2 {
+      text-align: center;
+      color: #b8860b; /* Dark golden color */
+      font-size: 22px;
+      margin-bottom: 20px;
+    }
+
+    p {
+      font-size: 16px;
+      text-align: center;
+    }
+
+    .qr-box {
+      background-color: #b8860b; /* Dark golden box */
+      padding: 15px;
+      border-radius: 10px;
+      text-align: center;
+      margin: 20px auto;
+      max-width: 250px;
+    }
+
+    .qr-box img {
+      width: 100%;
+      border-radius: 10px;
+    }
+
+    input[type="text"] {
+      display: block;
+      width: 90%;
+      margin: 15px auto;
+      padding: 10px;
+      font-size: 16px;
+      border-radius: 8px;
+      border: none;
+      outline: none;
+    }
+
+    button {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+      padding: 12px;
+      background-color: black;
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background-color: #333;
+    }
+  </style>
+
   <script>
     function submitUTR() {
       const utr = document.getElementById('utr').value;
@@ -24,8 +90,12 @@
 </head>
 <body>
   <h2>Deposit Money to Wallet</h2>
-  <p>Scan this UPI QR & pay minimum ₹300 to 7002521381@paytm</p>
-  <img src="https://upi-qr-code-link-here" alt="QR Code" width="200"> <!-- Replace with your QR -->
+  <p>Scan this UPI QR & pay minimum ₹300 to <b>7002521381@paytm</b></p>
+
+  <div class="qr-box">
+    <img src="https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=upi://pay?pa=7002521381@paytm&pn=MirzaBookDeposit" alt="QR Code">
+  </div>
+
   <p>After payment, enter UTR number below:</p>
   <input type="text" id="utr" placeholder="Enter UTR Number">
   <button onclick="submitUTR()">Submit</button>
