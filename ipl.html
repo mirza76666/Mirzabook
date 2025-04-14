@@ -4,167 +4,82 @@
   <meta charset="UTF-8">
   <title>IPL Live - MirzaBook</title>
   <style>
-    body {
-      font-family: Arial;
-      background-color: #f8f9fa;
-      padding: 20px;
-    }
-
-    .wallet {
-      text-align: right;
-      font-weight: bold;
-      margin-bottom: 10px;
-    }
-
-    .match-section, .toss-section {
-      border: 1px solid #ccc;
-      padding: 15px;
-      margin-bottom: 15px;
-      background-color: white;
-    }
-
-    .teams {
-      display: flex;
-      justify-content: space-between;
-      font-size: 20px;
-    }
-
-    .odds {
-      display: flex;
-      justify-content: space-around;
-      margin-top: 10px;
-    }
-
-    .odds div {
-      padding: 10px;
-      background-color: #e9ecef;
-      cursor: pointer;
-      border-radius: 5px;
-    }
-
-    .selected-bet {
-      margin-top: 15px;
-      font-weight: bold;
-    }
-
-    .suspended {
-      color: red;
-      font-size: 18px;
-      font-weight: bold;
-    }
-
-    .toss-section div {
-      display: flex;
-      justify-content: space-between;
-      padding: 10px;
-    }
-
-    .team1 {
-      background-color: darkred;
-      color: white;
-      flex: 1;
-      text-align: center;
-    }
-
-    .team2 {
-      background-color: darkgreen;
-      color: white;
-      flex: 1;
-      text-align: center;
-    }
-
-    button {
-      padding: 10px 15px;
-      margin-top: 10px;
-      background-color: blue;
-      color: white;
-      border: none;
-      border-radius: 5px;
-    }
+    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+    .wallet { text-align: right; margin-bottom: 10px; }
+    .wallet button { margin-left: 10px; }
+    .match-box, .toss-box { border: 1px solid #ccc; padding: 15px; background: white; margin-bottom: 20px; }
+    .team { display: flex; justify-content: space-between; padding: 10px 0; }
+    .bet-btn { padding: 6px 12px; background-color: #3498db; color: white; border: none; cursor: pointer; }
+    .bet-btn:hover { background-color: #2980b9; }
+    .odds { font-weight: bold; }
+    .toss-box .team { font-size: 18px; }
+    .toss-box .csk { color: darkred; }
+    .toss-box .lsg { color: darkgreen; }
   </style>
 </head>
 <body>
 
   <div class="wallet">
-    Wallet: ₹<span id="wallet-balance">0</span>
+    Wallet Balance: ₹<span id="walletBalance">0</span>
+    <button onclick="location.href='deposit.html'">Deposit</button>
+    <button onclick="location.href='withdrawal.html'">Withdraw</button>
   </div>
 
-  <div class="match-section" id="matchSection">
-    <h2 id="matchTitle">CSK vs LSG</h2>
+  <div class="toss-box">
+    <h3>TOSS PREDICTION - CSK vs LSG</h3>
+    <div class="team">
+      <span class="csk">CSK</span>
+      <span class="odds">2.00</span>
+      <button class="bet-btn" onclick="placeBet('toss-csk', 2.0)">Bet CSK</button>
+    </div>
+    <div class="team">
+      <span class="lsg">LSG</span>
+      <span class="odds">2.00</span>
+      <button class="bet-btn" onclick="placeBet('toss-lsg', 2.0)">Bet LSG</button>
+    </div>
+  </div>
 
-    <div class="odds">
-      <div onclick="placeBet('CSK')">CSK <br> Back: 2.5 | Lay: 2.5</div>
-      <div onclick="placeBet('LSG')">LSG <br> Back: 2.5 | Lay: 2.5</div>
+  <div class="match-box">
+    <h2>CSK vs LSG - Live Match</h2>
+
+    <div class="team">
+      <span>CSK</span>
+      <span class="odds">Back/Lay: 2.5</span>
+      <button class="bet-btn" onclick="placeBet('csk', 2.5)">Bet on CSK</button>
     </div>
 
-    <div class="selected-bet" id="betInfo"></div>
-    <input type="number" id="betAmount" placeholder="Enter Bet Amount">
-    <button onclick="placeBetFromInput()">Place Bet</button>
-    <p id="suspendMessage" class="suspended" style="display:none;">Match Suspended</p>
-  </div>
-
-  <div class="toss-section">
-    <h3>TOSS PREDICTION - CSK VS LSG</h3>
-    <div>
-      <div class="team1">2.00</div>
-      <div class="team2">2.00</div>
+    <div class="team">
+      <span>LSG</span>
+      <span class="odds">Back/Lay: 2.5</span>
+      <button class="bet-btn" onclick="placeBet('lsg', 2.5)">Bet on LSG</button>
     </div>
   </div>
 
   <script src="wallet.js"></script>
   <script>
-    const matchTimeEnd = "23:30";
-    const nextMatchTime = "00:00";
-    let matchEnded = false;
-
-    function updateWalletDisplay() {
-      document.getElementById("wallet-balance").innerText = getWalletBalance();
-    }
-
-    function placeBetFromInput() {
-      const amount = parseFloat(document.getElementById("betAmount").value);
-      const team = selectedTeam;
-      if (!team) return alert("Select a team to bet");
-      if (isNaN(amount) || amount <= 0) return alert("Enter valid amount");
-
-      const success = placeBet(amount);
-      if (success) {
-        document.getElementById("betInfo").innerText = `You placed ₹${amount} on ${team}`;
-      }
-      updateWalletDisplay();
-    }
-
-    let selectedTeam = null;
-    function placeBet(team) {
-      selectedTeam = team;
-      return true;
-    }
-
-    function autoUpdateMatch() {
-      const now = new Date();
-      const hrs = now.getHours();
-      const mins = now.getMinutes();
-
-      if (!matchEnded && hrs >= 23 && mins >= 30) {
-        document.getElementById("suspendMessage").style.display = 'block';
-        matchEnded = true;
+    function placeBet(team, odds) {
+      const amount = parseFloat(prompt("Enter bet amount:"));
+      if (isNaN(amount) || amount <= 0) {
+        alert("Enter valid amount");
+        return;
       }
 
-      if (hrs === 0 && mins === 0) {
-        // New match
-        document.getElementById("matchTitle").innerText = "PBKS vs KKR";
-        document.querySelectorAll(".odds div")[0].innerHTML = "PBKS <br> Back: 2.5 | Lay: 2.5";
-        document.querySelectorAll(".odds div")[1].innerHTML = "KKR <br> Back: 2.5 | Lay: 2.5";
-        document.getElementById("suspendMessage").style.display = 'none';
-        matchEnded = false;
-
-        document.querySelector(".toss-section h3").innerText = "TOSS PREDICTION - PBKS VS KKR";
+      let balance = parseFloat(localStorage.getItem("wallet") || "0");
+      if (amount > balance) {
+        alert("Insufficient Balance");
+        return;
       }
+
+      balance -= amount;
+      localStorage.setItem("wallet", balance.toFixed(2));
+      document.getElementById("walletBalance").innerText = balance.toFixed(2);
+
+      // Simulate bet record
+      alert(`Bet Placed on ${team.toUpperCase()} for ₹${amount}`);
     }
 
-    setInterval(autoUpdateMatch, 60000);
-    updateWalletDisplay();
+    // Update wallet on page load
+    document.getElementById("walletBalance").innerText = localStorage.getItem("wallet") || "0";
   </script>
-
 </body>
 </html>
