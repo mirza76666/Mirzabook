@@ -1,32 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>MirzaBook - India’s Largest Online Betting Platform</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MirzaBook - India's Largest Online Betting Platform</title>
   <style>
     body {
-      text-align: center;
       font-family: Arial, sans-serif;
-      margin-top: 100px;
+      text-align: center;
+      margin: 0;
+      padding: 0;
+      background-color: #f0f0f0;
     }
-    a {
-      display: inline-block;
-      margin: 20px;
-      padding: 15px 30px;
-      background-color: #2c3e50;
-      color: #fff;
-      text-decoration: none;
+
+    .container {
+      padding: 40px 20px;
+    }
+
+    h1 {
+      color: #2c3e50;
+    }
+
+    .btn-container {
+      margin-top: 30px;
+    }
+
+    .btn {
+      display: block;
+      width: 90%;
+      max-width: 300px;
+      margin: 10px auto;
+      padding: 15px;
+      font-size: 18px;
+      background-color: #2980b9;
+      color: white;
+      border: none;
       border-radius: 5px;
+      text-decoration: none;
     }
-    a:hover {
-      background-color: #16a085;
+
+    .btn:hover {
+      background-color: #3498db;
+    }
+
+    @media (min-width: 600px) {
+      .btn {
+        display: inline-block;
+        margin: 10px;
+      }
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to MirzaBook</h1>
-  <p>India's largest online betting platform</p>
-  <a href="login.html">Sign In</a>
-  <a href="signup.html">Register</a>
+  <div class="container">
+    <h1>MirzaBook - India's Largest Online Betting Platform</h1>
+    <div class="btn-container">
+      <a class="btn" href="login.html">Login</a>
+      <a class="btn" href="signup.html">Register</a>
+      <a class="btn" href="deposit.html">Deposit</a>
+      <a class="btn" href="withdrawal.html">Withdraw</a>
+      <a class="btn" href="ipl.html">IPL Live Betting</a>
+    </div>
+  </div>
 </body>
 </html>
