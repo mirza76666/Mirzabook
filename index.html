@@ -2,27 +2,59 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MirzaBook - India's Largest Online Betting Platform</title>
-
-  <!-- Google Search Console Verification -->
-  <meta name="google-site-verification" content="sBITIyAKi3C2w1jyj-dO3F5JMNYNRmIARlAl5YF0D9o" />
-  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      background-color: #000;
-      color: #FFD700;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      padding-top: 100px;
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
     }
-    h1 {
-      font-size: 28px;
+
+    body {
+      background: linear-gradient(to bottom, #FFD700, #fff8dc); /* Golden gradient */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      text-align: center;
+    }
+
+    .welcome {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #DAA520;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      background-color: #28a745;
+      color: white;
+      padding: 15px 30px;
+      margin: 10px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
+      text-decoration: none;
+      display: inline-block;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    .btn:hover {
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
-  <h1>Welcome to MirzaBook</h1>
-  <p>India's Largest Online Betting Platform</p>
+  <div>
+    <div class="welcome">Welcome to MirzaBook</div>
+    <a class="btn" href="login.html">Login</a>
+    <a class="btn" href="signup.html">Register</a>
+  </div>
 </body>
 </html>
