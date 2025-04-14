@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin - User List</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #e8f5e9;
+      padding: 20px;
+      color: #333;
+    }
+    h2 {
+      color: #2e7d32;
+      text-align: center;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      padding: 12px;
+      border: 1px solid #ccc;
+      text-align: center;
+    }
+    th {
+      background-color: #66bb6a;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+  <h2>Mirzabook Users</h2>
+  <table id="userTable">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Balance</th>
+        <th>Status</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
+
+  <script>
+    const sheetID = "1LxJUvBjjAN-tCW9UU6i2aP3rIMMwCkTFjIwZwUY8KaU";
+    const sheetName = "Users"; // Sheet tab ka naam
+    const url = `https://opensheet.elk.sh/${sheetID}/${sheetName}`;
+
+    fetch(url)
+      .then(res => res.json())
+      .then(data => {
+        const tbody = document.querySelector("#userTable tbody");
+        data.forEach(row => {
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td>${row.Name || ""}</td>
+            <td>${row.Email || ""}</td>
+            <td>${row.Phone || ""}</td>
+            <td>₹${row.Balance || "0"}</td>
+            <td>${row.Status || "Active"}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      });
+  </script>
+</body>
+</html>
