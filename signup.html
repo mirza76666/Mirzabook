@@ -1,26 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Sign Up - Mirzabook</title>
+  <title>Sign Up - MirzaBook</title>
 </head>
 <body>
-  <h2>Create Your Mirzabook Account</h2>
-  <form action="#" method="post">
-    <label>Username:</label><br>
-    <input type="text" name="username" required><br><br>
-    
-    <label>Email:</label><br>
-    <input type="email" name="email" required><br><br>
-
-    <label>Password:</label><br>
-    <input type="password" name="password" required><br><br>
-
-    <label>Confirm Password:</label><br>
-    <input type="password" name="confirm_password" required><br><br>
-
+  <h2>Register</h2>
+  <form id="signupForm">
+    <input type="text" id="phone" placeholder="Phone Number" required><br><br>
+    <input type="email" id="email" placeholder="Email" required><br><br>
+    <input type="password" id="password" placeholder="Password" required><br><br>
     <button type="submit">Sign Up</button>
   </form>
-  <br>
-  <a href="index.html">Back to Home</a>
+
+  <script>
+    document.getElementById('signupForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const phone = document.getElementById('phone').value;
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+
+      const user = { phone, email, password };
+      localStorage.setItem('mirzaUser', JSON.stringify(user));
+      alert('Registration Successful! Please log in.');
+      window.location.href = 'login.html';
+    });
+  </script>
 </body>
 </html>
