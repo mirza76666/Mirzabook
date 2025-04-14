@@ -1,66 +1,60 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>MirzaBook - India's Largest Online Betting Platform</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      text-align: center;
+    * {
       margin: 0;
       padding: 0;
-      background-color: #f0f0f0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', sans-serif;
     }
 
-    .container {
-      padding: 40px 20px;
+    body {
+      background: linear-gradient(to bottom, #FFD700, #fff8dc); /* Golden gradient */
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #333;
+      text-align: center;
     }
 
-    h1 {
-      color: #2c3e50;
-    }
-
-    .btn-container {
-      margin-top: 30px;
+    .welcome {
+      font-size: 2.5em;
+      font-weight: bold;
+      color: #DAA520;
+      margin-bottom: 20px;
     }
 
     .btn {
-      display: block;
-      width: 90%;
-      max-width: 300px;
-      margin: 10px auto;
-      padding: 15px;
-      font-size: 18px;
-      background-color: #2980b9;
+      background-color: #28a745;
       color: white;
+      padding: 15px 30px;
+      margin: 10px;
       border: none;
-      border-radius: 5px;
+      border-radius: 10px;
+      font-size: 1.2em;
+      font-weight: bold;
       text-decoration: none;
+      display: inline-block;
+      width: 80%;
+      max-width: 300px;
     }
 
     .btn:hover {
-      background-color: #3498db;
-    }
-
-    @media (min-width: 600px) {
-      .btn {
-        display: inline-block;
-        margin: 10px;
-      }
+      background-color: #218838;
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>MirzaBook - India's Largest Online Betting Platform</h1>
-    <div class="btn-container">
-      <a class="btn" href="login.html">Login</a>
-      <a class="btn" href="signup.html">Register</a>
-      <a class="btn" href="deposit.html">Deposit</a>
-      <a class="btn" href="withdrawal.html">Withdraw</a>
-      <a class="btn" href="ipl.html">IPL Live Betting</a>
-    </div>
+  <div>
+    <div class="welcome">Welcome to MirzaBook</div>
+    <a class="btn" href="login.html">Login</a>
+    <a class="btn" href="signup.html">Register</a>
   </div>
 </body>
 </html>
