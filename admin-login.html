@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Login - Mirzabook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      font-family: Arial;
+      background-color: #f0f0f0;
+      padding: 20px;
+    }
+    .login-box {
+      background: white;
+      padding: 30px;
+      max-width: 400px;
+      margin: auto;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    input[type=text], input[type=password] {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    button {
+      background-color: #28a745;
+      color: white;
+      padding: 12px;
+      width: 100%;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #218838;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-box">
+  <h2>Admin Login</h2>
+  <input type="text" id="username" placeholder="Enter username">
+  <input type="password" id="password" placeholder="Enter password">
+  <button onclick="login()">Login</button>
+</div>
+
+<script>
+  function login() {
+    var username = document.getElementById("username").value;
+    var password = document.getElementById("password").value;
+
+    // Change these to your actual admin credentials
+    if (username === "admin" && password === "mirzabook123") {
+      localStorage.setItem("adminLoggedIn", "true");
+      window.location.href = "admin-users.html";
+    } else {
+      alert("Invalid username or password");
+    }
+  }
+</script>
+
+</body>
+</html>
