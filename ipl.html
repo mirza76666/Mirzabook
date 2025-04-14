@@ -4,140 +4,62 @@
   <meta charset="UTF-8">
   <title>IPL Live - MirzaBook</title>
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #121212;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    h1 {
-      color: #ffcc00;
-    }
-    .match {
-      font-size: 24px;
-      margin: 10px 0;
-    }
-    .toss {
-      margin-top: 30px;
-      font-weight: bold;
-    }
-    .toss .teams {
-      font-size: 22px;
-      margin-bottom: 10px;
-    }
-    .toss .odds {
-      font-size: 20px;
-    }
-    .toss .csk {
-      color: darkred;
-      font-weight: bold;
-    }
-    .toss .lsg {
-      color: darkgreen;
-      font-weight: bold;
-    }
-    .bookmaker {
-      margin-top: 40px;
-    }
-    .bookmaker table {
-      margin: 0 auto;
-      width: 80%;
-      border-collapse: collapse;
-      background: #1e1e1e;
-    }
-    .bookmaker th, .bookmaker td {
-      border: 1px solid #444;
-      padding: 12px;
-    }
-    .back {
-      background-color: #4caf50;
-      color: white;
-    }
-    .lay {
-      background-color: #f44336;
-      color: white;
-    }
-    .suspended {
-      background-color: #ff0000;
-      padding: 10px;
-      margin-top: 20px;
-      font-weight: bold;
-    }
+    body { font-family: Arial; background: #f4f4f4; padding: 20px; }
+    .match-box { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px #aaa; }
+    .teams { display: flex; justify-content: space-between; font-size: 24px; }
+    .odds { display: flex; justify-content: space-around; margin-top: 20px; }
+    .team-box { padding: 10px; text-align: center; width: 45%; }
+    .back { background: #a2f2a2; padding: 10px; border-radius: 5px; }
+    .lay { background: #f2a2a2; padding: 10px; border-radius: 5px; margin-top: 10px; }
+    .toss { margin-top: 30px; padding: 15px; background: #ffe5e5; border-left: 5px solid #f00; font-size: 18px; }
+    .suspended { color: red; font-weight: bold; text-align: center; margin-top: 20px; }
   </style>
 </head>
 <body>
-  <h1>MirzaBook - IPL Live Betting</h1>
 
-  <div id="match-section">
-    <div class="match" id="match-name">CSK vs LSG</div>
+  <h2>IPL Live Betting - CSK vs LSG</h2>
 
-    <div class="toss">
-      <div class="teams">TOSS PREDICTION - <span id="team1">CSK</span> vs <span id="team2">LSG</span></div>
-      <div class="odds">
-        <span class="csk">2.00</span> vs <span class="lsg">2.00</span>
+  <div class="match-box" id="matchBox">
+    <div class="teams">
+      <div>CSK</div>
+      <div>VS</div>
+      <div>LSG</div>
+    </div>
+
+    <div class="odds">
+      <div class="team-box">
+        <div class="back">Back: 2.5</div>
+        <div class="lay">Lay: 2.5</div>
+      </div>
+      <div class="team-box">
+        <div class="back">Back: 2.5</div>
+        <div class="lay">Lay: 2.5</div>
       </div>
     </div>
 
-    <div class="bookmaker">
-      <h2>Bookmaker Odds</h2>
-      <table>
-        <tr>
-          <th>Team</th>
-          <th>Back</th>
-          <th>Lay</th>
-        </tr>
-        <tr>
-          <td id="team1-bm">CSK</td>
-          <td class="back">2.5</td>
-          <td class="lay">2.5</td>
-        </tr>
-        <tr>
-          <td id="team2-bm">LSG</td>
-          <td class="back">2.5</td>
-          <td class="lay">2.5</td>
-        </tr>
-      </table>
+    <div class="toss">
+      <strong>TOSS PREDICTION - CSK VS LSG</strong><br><br>
+      <span style="color: darkred;">2.00</span> vs <span style="color: darkgreen;">2.00</span>
     </div>
 
-    <div id="suspend-box" class="suspended" style="display: none;">
-      SUSPENDED
+    <div class="suspended" id="suspendText" style="display: none;">
+      Match Suspended
     </div>
   </div>
 
   <script>
-    const matchName = document.getElementById("match-name");
-    const team1 = document.getElementById("team1");
-    const team2 = document.getElementById("team2");
-    const team1bm = document.getElementById("team1-bm");
-    const team2bm = document.getElementById("team2-bm");
-    const suspendBox = document.getElementById("suspend-box");
+    // Match suspension system
+    const now = new Date();
+    const matchEnd = new Date();
+    matchEnd.setHours(23, 30, 0); // 11:30 PM
 
-    function updateMatch() {
-      const now = new Date();
-      const hour = now.getHours();
-      const minute = now.getMinutes();
-      const indiaOffset = 5.5 * 60 * 60 * 1000;
-      const indiaTime = new Date(now.getTime() + indiaOffset);
-
-      const istHour = indiaTime.getUTCHours();
-      const istMin = indiaTime.getUTCMinutes();
-
-      if (istHour === 0 && istMin >= 0) {
-        matchName.innerText = "PBKS vs KKR";
-        team1.innerText = "PBKS";
-        team2.innerText = "KKR";
-        team1bm.innerText = "PBKS";
-        team2bm.innerText = "KKR";
-      }
-
-      if (istHour >= 23 && istMin >= 30) {
-        suspendBox.style.display = "block";
-      }
+    if (now > matchEnd) {
+      document.getElementById("suspendText").style.display = "block";
+      document.querySelector(".odds").style.display = "none";
+      document.querySelector(".toss").style.display = "none";
+      document.querySelector(".teams").innerHTML = "PBKS VS KKR (Upcoming Match)";
     }
-
-    setInterval(updateMatch, 60000); // Check every minute
-    updateMatch();
   </script>
+
 </body>
 </html>
