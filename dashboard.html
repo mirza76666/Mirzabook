@@ -3,7 +3,10 @@
 <head>
   <title>Mirzabook Admin Dashboard</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
   <style>
+    /* SAME STYLE AS BEFORE */
     body {
       font-family: Arial, sans-serif;
       background-color: #eafbe7;
@@ -126,6 +129,20 @@
 </section>
 
 <script>
+  // FIREBASE CONFIGURATION (Replace below with your real Firebase config)
+  const firebaseConfig = {
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT.firebaseio.com",
+    projectId: "YOUR_PROJECT",
+    storageBucket: "YOUR_PROJECT.appspot.com",
+    messagingSenderId: "YOUR_SENDER_ID",
+    appId: "YOUR_APP_ID"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.database();
+
   if (localStorage.getItem("adminLoggedIn") !== "true") {
     window.location.href = "admin.html";
   }
@@ -138,29 +155,10 @@
   function showSection(id) {
     document.querySelectorAll("section").forEach(sec => sec.classList.add("hidden"));
     document.getElementById(id).classList.remove("hidden");
-
     if (id === "userList") renderUserList();
     if (id === "blockUser") renderBlockUserList();
     if (id === "depositRequests") renderDeposits();
     if (id === "withdrawRequests") renderWithdrawals();
-  }
-
-  function getUsers() {
-    return JSON.parse(localStorage.getItem("users") || "[]");
-  }
-
-  function saveUsers(users) {
-    localStorage.setItem("users", JSON.stringify(users));
-  }
-
-  function renderUserList() {
-    const users = getUsers();
-    const tbody = document.querySelector("#userTable tbody");
-    tbody.innerHTML = "";
-    users.forEach(u => {
-      const row = `<tr><td>${u.email}</td><td>${u.phone}</td><td>${u.password}</td><td>${u.blocked ? "Yes" : "No"}</td></tr>`;
-      tbody.innerHTML += row;
-    });
   }
 
   function addNewUser() {
@@ -168,110 +166,119 @@
     const phone = document.getElementById("newPhone").value;
     const password = document.getElementById("newPassword").value;
     if (!email || !phone || !password) return alert("Fill all fields!");
+    const newUser = {
+      email, phone, password, wallet: 0, blocked: false
+    };
+    db.ref("users").push(newUser).then(() => {
+      alert("User added!");
+      document.getElementById("newEmail").value = "";
+      document.getElementById("newPhone").value = "";
+      document.getElementById("newPassword").value = "";
+    });
+  }
 
-    const users = getUsers();
-    users.push({ email, phone, password, wallet: 0, blocked: false });
-    saveUsers(users);
-    alert("User added!");
-    document.getElementById("newEmail").value = "";
-    document.getElementById("newPhone").value = "";
-    document.getElementById("newPassword").value = "";
+  function renderUserList() {
+    db.ref("users").once("value", snapshot => {
+      const tbody = document.querySelector("#userTable tbody");
+      tbody.innerHTML = "";
+      snapshot.forEach(child => {
+        const u = child.val();
+        const row = `<tr><td>${u.email}</td><td>${u.phone}</td><td>${u.password}</td><td>${u.blocked ? "Yes" : "No"}</td></tr>`;
+        tbody.innerHTML += row;
+      });
+    });
   }
 
   function renderBlockUserList() {
-    const users = getUsers();
-    const tbody = document.querySelector("#blockTable tbody");
-    tbody.innerHTML = "";
-    users.forEach((u, i) => {
-      const btn = u.blocked ? `<button class="action" onclick="toggleBlock(${i})">Unblock</button>` : `<button class="action reject" onclick="toggleBlock(${i})">Block</button>`;
-      tbody.innerHTML += `<tr><td>${u.email}</td><td>${u.blocked ? "Blocked" : "Active"}</td><td>${btn}</td></tr>`;
+    db.ref("users").once("value", snapshot => {
+      const tbody = document.querySelector("#blockTable tbody");
+      tbody.innerHTML = "";
+      snapshot.forEach(child => {
+        const u = child.val();
+        const key = child.key;
+        const btn = u.blocked
+          ? `<button class="action" onclick="toggleBlock('${key}', false)">Unblock</button>`
+          : `<button class="action reject" onclick="toggleBlock('${key}', true)">Block</button>`;
+        const row = `<tr><td>${u.email}</td><td>${u.blocked ? "Blocked" : "Active"}</td><td>${btn}</td></tr>`;
+        tbody.innerHTML += row;
+      });
     });
   }
 
-  function toggleBlock(index) {
-    const users = getUsers();
-    users[index].blocked = !users[index].blocked;
-    saveUsers(users);
-    renderBlockUserList();
-  }
-
-  function getRequests(type) {
-    return JSON.parse(localStorage.getItem(type) || "[]");
-  }
-
-  function saveRequests(type, data) {
-    localStorage.setItem(type, JSON.stringify(data));
+  function toggleBlock(key, status) {
+    db.ref("users/" + key).update({ blocked: status }).then(renderBlockUserList);
   }
 
   function renderDeposits() {
-    const requests = getRequests("deposits");
-    const users = getUsers();
-    const tbody = document.querySelector("#depositTable tbody");
-    tbody.innerHTML = "";
-    requests.forEach((r, i) => {
-      const row = `<tr><td>${r.email}</td><td>${r.amount}</td><td>${r.utr}</td>
-      <td>
-        <button class="action" onclick="approveDeposit(${i})">Approve</button>
-        <button class="action reject" onclick="rejectDeposit(${i})">Reject</button>
-      </td></tr>`;
-      tbody.innerHTML += row;
+    db.ref("deposits").once("value", snapshot => {
+      const tbody = document.querySelector("#depositTable tbody");
+      tbody.innerHTML = "";
+      snapshot.forEach(child => {
+        const r = child.val();
+        const key = child.key;
+        const row = `<tr><td>${r.email}</td><td>${r.amount}</td><td>${r.utr}</td>
+          <td>
+            <button class="action" onclick="approveDeposit('${key}', ${r.amount}, '${r.email}')">Approve</button>
+            <button class="action reject" onclick="rejectDeposit('${key}')">Reject</button>
+          </td></tr>`;
+        tbody.innerHTML += row;
+      });
     });
   }
 
-  function approveDeposit(index) {
-    const deposits = getRequests("deposits");
-    const users = getUsers();
-    const req = deposits[index];
-    const user = users.find(u => u.email === req.email);
-    if (user) {
-      user.wallet = (user.wallet || 0) + parseFloat(req.amount);
-      saveUsers(users);
-    }
-    deposits.splice(index, 1);
-    saveRequests("deposits", deposits);
-    renderDeposits();
+  function approveDeposit(key, amount, email) {
+    db.ref("users").once("value", snapshot => {
+      snapshot.forEach(child => {
+        const u = child.val();
+        if (u.email === email) {
+          const userKey = child.key;
+          const updatedWallet = (u.wallet || 0) + parseFloat(amount);
+          db.ref("users/" + userKey).update({ wallet: updatedWallet });
+        }
+      });
+      db.ref("deposits/" + key).remove();
+      renderDeposits();
+    });
   }
 
-  function rejectDeposit(index) {
-    const deposits = getRequests("deposits");
-    deposits.splice(index, 1);
-    saveRequests("deposits", deposits);
-    renderDeposits();
+  function rejectDeposit(key) {
+    db.ref("deposits/" + key).remove().then(renderDeposits);
   }
 
   function renderWithdrawals() {
-    const requests = getRequests("withdrawals");
-    const tbody = document.querySelector("#withdrawTable tbody");
-    tbody.innerHTML = "";
-    requests.forEach((r, i) => {
-      const row = `<tr><td>${r.email}</td><td>${r.amount}</td>
-      <td>
-        <button class="action" onclick="approveWithdraw(${i})">Approve</button>
-        <button class="action reject" onclick="rejectWithdraw(${i})">Reject</button>
-      </td></tr>`;
-      tbody.innerHTML += row;
+    db.ref("withdrawals").once("value", snapshot => {
+      const tbody = document.querySelector("#withdrawTable tbody");
+      tbody.innerHTML = "";
+      snapshot.forEach(child => {
+        const r = child.val();
+        const key = child.key;
+        const row = `<tr><td>${r.email}</td><td>${r.amount}</td>
+          <td>
+            <button class="action" onclick="approveWithdraw('${key}', ${r.amount}, '${r.email}')">Approve</button>
+            <button class="action reject" onclick="rejectWithdraw('${key}')">Reject</button>
+          </td></tr>`;
+        tbody.innerHTML += row;
+      });
     });
   }
 
-  function approveWithdraw(index) {
-    const withdrawals = getRequests("withdrawals");
-    const users = getUsers();
-    const req = withdrawals[index];
-    const user = users.find(u => u.email === req.email);
-    if (user && user.wallet >= req.amount) {
-      user.wallet -= parseFloat(req.amount);
-      saveUsers(users);
-    }
-    withdrawals.splice(index, 1);
-    saveRequests("withdrawals", withdrawals);
-    renderWithdrawals();
+  function approveWithdraw(key, amount, email) {
+    db.ref("users").once("value", snapshot => {
+      snapshot.forEach(child => {
+        const u = child.val();
+        if (u.email === email && u.wallet >= amount) {
+          const userKey = child.key;
+          const updatedWallet = u.wallet - parseFloat(amount);
+          db.ref("users/" + userKey).update({ wallet: updatedWallet });
+        }
+      });
+      db.ref("withdrawals/" + key).remove();
+      renderWithdrawals();
+    });
   }
 
-  function rejectWithdraw(index) {
-    const withdrawals = getRequests("withdrawals");
-    withdrawals.splice(index, 1);
-    saveRequests("withdrawals", withdrawals);
-    renderWithdrawals();
+  function rejectWithdraw(key) {
+    db.ref("withdrawals/" + key).remove().then(renderWithdrawals);
   }
 </script>
 
