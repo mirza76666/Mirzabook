@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Mirzabook Admin Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #eafbe7;
+      margin: 0;
+      padding: 0;
+    }
+    header {
+      background-color: #0b6623;
+      padding: 15px;
+      text-align: center;
+      color: white;
+      font-size: 24px;
+    }
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      background-color: #d0f0c0;
+      justify-content: space-around;
+    }
+    nav button {
+      padding: 10px;
+      margin: 10px;
+      background-color: #0b6623;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      flex: 1 1 45%;
+    }
+    section {
+      padding: 20px;
+    }
+    .logout-btn {
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      background: red;
+      color: white;
+      padding: 6px 12px;
+      border: none;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  MIRZABOOK Admin
+  <button class="logout-btn" onclick="logout()">Logout</button>
+</header>
+
+<nav>
+  <button onclick="alert('User List Page')">User List</button>
+  <button onclick="alert('Add New User Page')">Add User</button>
+  <button onclick="alert('Block User Page')">Block User</button>
+  <button onclick="alert('Deposit Approve/Reject')">Deposits</button>
+  <button onclick="alert('Withdraw Approve/Reject')">Withdrawals</button>
+</nav>
+
+<section>
+  <h3>Welcome, Admin!</h3>
+  <p>Use the buttons above to manage your platform.</p>
+</section>
+
+<script>
+  if (localStorage.getItem("adminLoggedIn") !== "true") {
+    window.location.href = "admin.html";
+  }
+
+  function logout() {
+    localStorage.removeItem("adminLoggedIn");
+    window.location.href = "admin.html";
+  }
+</script>
+
+</body>
+</html>
