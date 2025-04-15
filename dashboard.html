@@ -16,6 +16,7 @@
       text-align: center;
       color: white;
       font-size: 24px;
+      position: relative;
     }
     nav {
       display: flex;
@@ -46,6 +47,34 @@
       border: none;
       border-radius: 5px;
     }
+    .hidden { display: none; }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+    }
+    th, td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+    }
+    input, select {
+      padding: 8px;
+      margin: 5px 0;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    button.action {
+      background: #0b6623;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      margin: 2px;
+      border-radius: 4px;
+    }
+    button.reject {
+      background: red;
+    }
   </style>
 </head>
 <body>
@@ -56,16 +85,44 @@
 </header>
 
 <nav>
-  <button onclick="alert('User List Page')">User List</button>
-  <button onclick="alert('Add New User Page')">Add User</button>
-  <button onclick="alert('Block User Page')">Block User</button>
-  <button onclick="alert('Deposit Approve/Reject')">Deposits</button>
-  <button onclick="alert('Withdraw Approve/Reject')">Withdrawals</button>
+  <button onclick="showSection('userList')">User List</button>
+  <button onclick="showSection('addUser')">Add User</button>
+  <button onclick="showSection('blockUser')">Block User</button>
+  <button onclick="showSection('depositRequests')">Deposits</button>
+  <button onclick="showSection('withdrawRequests')">Withdrawals</button>
 </nav>
 
-<section>
+<section id="main">
   <h3>Welcome, Admin!</h3>
   <p>Use the buttons above to manage your platform.</p>
+</section>
+
+<section id="userList" class="hidden">
+  <h3>User List</h3>
+  <table id="userTable"><thead><tr><th>Email</th><th>Phone</th><th>Password</th><th>Blocked</th></tr></thead><tbody></tbody></table>
+</section>
+
+<section id="addUser" class="hidden">
+  <h3>Add New User</h3>
+  <input type="text" id="newEmail" placeholder="Email">
+  <input type="text" id="newPhone" placeholder="Phone">
+  <input type="text" id="newPassword" placeholder="Password">
+  <button onclick="addNewUser()">Add User</button>
+</section>
+
+<section id="blockUser" class="hidden">
+  <h3>Block / Unblock Users</h3>
+  <table id="blockTable"><thead><tr><th>Email</th><th>Status</th><th>Action</th></tr></thead><tbody></tbody></table>
+</section>
+
+<section id="depositRequests" class="hidden">
+  <h3>Deposit Requests</h3>
+  <table id="depositTable"><thead><tr><th>User</th><th>Amount</th><th>UTR</th><th>Action</th></tr></thead><tbody></tbody></table>
+</section>
+
+<section id="withdrawRequests" class="hidden">
+  <h3>Withdrawal Requests</h3>
+  <table id="withdrawTable"><thead><tr><th>User</th><th>Amount</th><th>Action</th></tr></thead><tbody></tbody></table>
 </section>
 
 <script>
@@ -76,6 +133,145 @@
   function logout() {
     localStorage.removeItem("adminLoggedIn");
     window.location.href = "admin.html";
+  }
+
+  function showSection(id) {
+    document.querySelectorAll("section").forEach(sec => sec.classList.add("hidden"));
+    document.getElementById(id).classList.remove("hidden");
+
+    if (id === "userList") renderUserList();
+    if (id === "blockUser") renderBlockUserList();
+    if (id === "depositRequests") renderDeposits();
+    if (id === "withdrawRequests") renderWithdrawals();
+  }
+
+  function getUsers() {
+    return JSON.parse(localStorage.getItem("users") || "[]");
+  }
+
+  function saveUsers(users) {
+    localStorage.setItem("users", JSON.stringify(users));
+  }
+
+  function renderUserList() {
+    const users = getUsers();
+    const tbody = document.querySelector("#userTable tbody");
+    tbody.innerHTML = "";
+    users.forEach(u => {
+      const row = `<tr><td>${u.email}</td><td>${u.phone}</td><td>${u.password}</td><td>${u.blocked ? "Yes" : "No"}</td></tr>`;
+      tbody.innerHTML += row;
+    });
+  }
+
+  function addNewUser() {
+    const email = document.getElementById("newEmail").value;
+    const phone = document.getElementById("newPhone").value;
+    const password = document.getElementById("newPassword").value;
+    if (!email || !phone || !password) return alert("Fill all fields!");
+
+    const users = getUsers();
+    users.push({ email, phone, password, wallet: 0, blocked: false });
+    saveUsers(users);
+    alert("User added!");
+    document.getElementById("newEmail").value = "";
+    document.getElementById("newPhone").value = "";
+    document.getElementById("newPassword").value = "";
+  }
+
+  function renderBlockUserList() {
+    const users = getUsers();
+    const tbody = document.querySelector("#blockTable tbody");
+    tbody.innerHTML = "";
+    users.forEach((u, i) => {
+      const btn = u.blocked ? `<button class="action" onclick="toggleBlock(${i})">Unblock</button>` : `<button class="action reject" onclick="toggleBlock(${i})">Block</button>`;
+      tbody.innerHTML += `<tr><td>${u.email}</td><td>${u.blocked ? "Blocked" : "Active"}</td><td>${btn}</td></tr>`;
+    });
+  }
+
+  function toggleBlock(index) {
+    const users = getUsers();
+    users[index].blocked = !users[index].blocked;
+    saveUsers(users);
+    renderBlockUserList();
+  }
+
+  function getRequests(type) {
+    return JSON.parse(localStorage.getItem(type) || "[]");
+  }
+
+  function saveRequests(type, data) {
+    localStorage.setItem(type, JSON.stringify(data));
+  }
+
+  function renderDeposits() {
+    const requests = getRequests("deposits");
+    const users = getUsers();
+    const tbody = document.querySelector("#depositTable tbody");
+    tbody.innerHTML = "";
+    requests.forEach((r, i) => {
+      const row = `<tr><td>${r.email}</td><td>${r.amount}</td><td>${r.utr}</td>
+      <td>
+        <button class="action" onclick="approveDeposit(${i})">Approve</button>
+        <button class="action reject" onclick="rejectDeposit(${i})">Reject</button>
+      </td></tr>`;
+      tbody.innerHTML += row;
+    });
+  }
+
+  function approveDeposit(index) {
+    const deposits = getRequests("deposits");
+    const users = getUsers();
+    const req = deposits[index];
+    const user = users.find(u => u.email === req.email);
+    if (user) {
+      user.wallet = (user.wallet || 0) + parseFloat(req.amount);
+      saveUsers(users);
+    }
+    deposits.splice(index, 1);
+    saveRequests("deposits", deposits);
+    renderDeposits();
+  }
+
+  function rejectDeposit(index) {
+    const deposits = getRequests("deposits");
+    deposits.splice(index, 1);
+    saveRequests("deposits", deposits);
+    renderDeposits();
+  }
+
+  function renderWithdrawals() {
+    const requests = getRequests("withdrawals");
+    const tbody = document.querySelector("#withdrawTable tbody");
+    tbody.innerHTML = "";
+    requests.forEach((r, i) => {
+      const row = `<tr><td>${r.email}</td><td>${r.amount}</td>
+      <td>
+        <button class="action" onclick="approveWithdraw(${i})">Approve</button>
+        <button class="action reject" onclick="rejectWithdraw(${i})">Reject</button>
+      </td></tr>`;
+      tbody.innerHTML += row;
+    });
+  }
+
+  function approveWithdraw(index) {
+    const withdrawals = getRequests("withdrawals");
+    const users = getUsers();
+    const req = withdrawals[index];
+    const user = users.find(u => u.email === req.email);
+    if (user && user.wallet >= req.amount) {
+      user.wallet -= parseFloat(req.amount);
+      saveUsers(users);
+    }
+    withdrawals.splice(index, 1);
+    saveRequests("withdrawals", withdrawals);
+    renderWithdrawals();
+  }
+
+  function rejectWithdraw(index) {
+    const withdrawals = getRequests("withdrawals");
+    withdrawals.splice(index, 1);
+    saveRequests("withdrawals", withdrawals);
+    renderWithdrawals();
   }
 </script>
 
