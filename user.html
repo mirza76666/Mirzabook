@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>MirzaBook User Panel</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f8fb;
+      padding: 20px;
+      margin: 0;
+    }
+    header {
+      background-color: #0077b6;
+      color: white;
+      padding: 15px;
+      text-align: center;
+      font-size: 24px;
+    }
+    section {
+      margin-top: 20px;
+    }
+    input {
+      padding: 10px;
+      width: 100%;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+    button {
+      padding: 10px;
+      width: 100%;
+      background-color: #0077b6;
+      color: white;
+      border: none;
+      margin-bottom: 15px;
+      border-radius: 5px;
+      font-size: 16px;
+    }
+    .balance {
+      font-size: 20px;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  MirzaBook User Panel
+</header>
+
+<div class="balance">
+  Wallet Balance: ₹<span id="walletAmount">0</span>
+</div>
+
+<section>
+  <h3>Deposit Request</h3>
+  <input type="number" id="depositAmount" placeholder="Enter amount to deposit">
+  <input type="text" id="utrNumber" placeholder="Enter UTR number">
+  <button onclick="submitDeposit()">Submit Deposit</button>
+</section>
+
+<section>
+  <h3>Withdrawal Request</h3>
+  <input type="number" id="withdrawAmount" placeholder="Enter amount to withdraw">
+  <button onclick="submitWithdraw()">Submit Withdrawal</button>
+</section>
+
+<script>
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  let users = JSON.parse(localStorage.getItem("users") || "[]");
+
+  if (!currentUser) {
+    alert("Please login first");
+    window.location.href = "login.html";
+  }
+
+  const user = users.find(u => u.email === currentUser.email);
+
+  function updateBalance() {
+    document.getElementById("walletAmount").textContent = user.wallet || 0;
+  }
+
+  function submitDeposit() {
+    const amount = parseFloat(document.getElementById("depositAmount").value);
+    const utr = document.getElementById("utrNumber").value.trim();
+
+    if (!amount || !utr) return alert("Please fill both fields.");
+
+    const deposits = JSON.parse(localStorage.getItem("deposits") || "[]");
+    deposits.push({
+      email: user.email,
+      amount,
+      utr
+    });
+    localStorage.setItem("deposits", JSON.stringify(deposits));
+    alert("Deposit request submitted. Please wait for admin approval.");
+    document.getElementById("depositAmount").value = "";
+    document.getElementById("utrNumber").value = "";
+  }
+
+  function submitWithdraw() {
+    const amount = parseFloat(document.getElementById("withdrawAmount").value);
+    if (!amount) return alert("Enter amount to withdraw.");
+    if (amount > user.wallet) return alert("Insufficient balance.");
+
+    const withdrawals = JSON.parse(localStorage.getItem("withdrawals") || "[]");
+    withdrawals.push({
+      email: user.email,
+      amount
+    });
+    localStorage.setItem("withdrawals", JSON.stringify(withdrawals));
+    alert("Withdrawal request submitted. Please wait for admin approval.");
+    document.getElementById("withdrawAmount").value = "";
+  }
+
+  updateBalance();
+</script>
+
+</body>
+</html>
