@@ -38,6 +38,26 @@
       border-radius: 10px;
     }
 
+    .upi-id {
+      font-weight: bold;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 16px;
+      color: black;
+      position: relative;
+    }
+
+    .copy-btn {
+      background-color: black;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 12px;
+      margin-top: 10px;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
     input[type="text"] {
       display: block;
       width: 90%;
@@ -69,6 +89,15 @@
   </style>
 
   <script>
+    function copyUPI() {
+      const upiID = "sabinayesmin0222@okicici";
+      navigator.clipboard.writeText(upiID).then(function() {
+        alert("UPI ID copied: " + upiID);
+      }, function(err) {
+        alert("Failed to copy UPI ID");
+      });
+    }
+
     function submitUTR() {
       const utr = document.getElementById('utr').value;
       if (utr.trim() === "") {
@@ -77,11 +106,8 @@
       }
 
       alert("UTR submitted successfully!\nPlease wait 10 minutes for confirmation.");
-      
-      // Save UTR in localStorage for record (optional)
       localStorage.setItem("lastUTR", utr);
 
-      // Redirect to IPL live after 3 seconds
       setTimeout(() => {
         window.location.href = "ipl.html";
       }, 3000);
@@ -90,10 +116,17 @@
 </head>
 <body>
   <h2>Deposit Money to Wallet</h2>
-  <p>Scan this UPI QR & pay minimum ₹300 to <b>7002521381@paytm</b></p>
+
+  <p>1. Make payment to our beneficiaries and enter the amount</p>
+  <p><strong>2. PAY MINIMUM - ₹3000/-<br>PAY MAXIMUM - ₹50000/-</strong></p>
 
   <div class="qr-box">
-    <img src="https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=upi://pay?pa=7002521381@paytm&pn=MirzaBookDeposit" alt="QR Code">
+    <img src="https://chart.googleapis.com/chart?cht=qr&chs=300x300&chl=upi://pay?pa=sabinayesmin0222@okicici&pn=MirzaBookDeposit" alt="QR Code">
+  </div>
+
+  <div class="upi-id">
+    UPI ID: sabinayesmin0222@okicici <br>
+    <button class="copy-btn" onclick="copyUPI()">Copy UPI</button>
   </div>
 
   <p>After payment, enter UTR number below:</p>
